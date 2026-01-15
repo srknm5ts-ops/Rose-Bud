@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Rose Bud</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Cormorant+Garamond:wght@500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<body>
+
+    <header class="header">
+        <h1 class="logo">
+            <a href="index.html">Rose Bud</a>
+        </h1>
+        
+        <nav class="header-nav">
+            <a href="photolog.html" class="nav-link">Photolog</a>
+            <a href="portfolio/index.html" class="nav-link">Portfolio</a>
+            <a href="about.html" class="nav-link">About</a>
+        </nav>
+    </header>
+
+    <main class="home">
+
+        <section class="hero">
+            <img src="images/23-10-01.jpg" alt="" class="hero-image">
+
+            <div class="hero-text">
+                <p class="site-lead">
+                    A quiet record of racehorses and moments.
+                </p>
+            </div>
+        </section>
+
+        <section class="home-photolog">
+            <h2 class="section-title">Latest Photolog</h2>
+            <div id="post-list" class="post-list"></div>
+        
+            <div class="view-all-wrapper">
+              <a href="photolog.html" class="view-all-button">View all →</a>
+            </div>
+        </section>
+
+        <section class="home-portfolio">
+            <h2 class="section-title">Portfolio</h2>
+            <div id="featured-portfolio" class="post-list"></div>
+          
+            <div class="view-all-wrapper">
+              <a href="portfolio/index.html" class="view-all-button">View all →</a>
+            </div>
+        </section>
+                  
+    
+    </main>
+
+    <script>
+        fetch('posts.json')
+          .then(res => res.json())
+          .then(posts => {
+            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+            const list = document.getElementById('post-list');
+            const latestPosts = posts.slice(0, 6);
+        
+            latestPosts.forEach(post => {
+              const a = document.createElement('a');
+              a.href = `post.html?id=${post.id}`;
+              a.className = 'post-card';
+        
+              a.innerHTML = `
+                <div class="thumb">
+                  ${post.isNew ? '<span class="new">NEW</span>' : ''}
+                  <img src="images/${post.thumbnail}" alt="" loading="lazy">
+                </div>
+                <div class="meta">
+                  <div class="date">${post.date}</div>
+                  <div class="title">@${post.title}</div>
+                </div>
+              `;
+        
+              list.appendChild(a);
+            });
+          });
+        </script>
+
+    <script>
+        fetch('portfolio/portfolio.json')
+        .then(res => res.json())
+        .then(items => {
+            const list = document.getElementById('featured-portfolio');
+        
+            items.slice(0, 3).forEach(item => {
+            const a = document.createElement('a');
+            a.href = `portfolio/${item.id}.html`;
+            a.className = 'portfolio-card';
+        
+            a.innerHTML = `
+                <div class="thumb">
+                <img src="images/${item.thumbnail}" alt="" loading="lazy">
+                </div>
+                <div class="meta">
+                <div class="title">${item.name}</div>
+                </div>
+            `;
+        
+            list.appendChild(a);
+            });
+        });
+    </script>
+    
+    
+        
+</body>
+</html>
